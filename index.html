@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Repetidor de Texto</title>
+    <style>
+      /* Estilos para dispositivos móviles */
+@media screen and (max-width: 768px) {
+    .container {
+        max-width: 100%;
+        padding: 10px;
+    }
+
+    h1 {
+        font-size: 24px;
+    }
+
+    label {
+        font-size: 14px;
+    }
+
+    textarea,
+    input[type="number"] {
+        width: 100%;
+        padding: 8px;
+    }
+
+    .form-group.checkbox-group label {
+        font-size: 14px;
+    }
+
+    button {
+        font-size: 16px;
+        padding: 8px 16px;
+    }
+
+    #resultado {
+        height: 100px;
+    }
+
+    #copyButton {
+        font-size: 14px;
+        padding: 5px 10px;
+    }
+
+    #historial {
+        font-size: 14px;
+    }
+
+    p {
+        font-size: 14px;
+    }
+}
+      
+      /* Estilo mejorado para el botón de selección de idioma */
+#languageSelector {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+#languageSelector:hover {
+    background-color: #0056b3;
+}
+      /* Limitar el ancho de los input */
+input[type="text"],
+input[type="number"] {
+    max-width: 100%;
+    width: 100%;
+    box-sizing: border-box;
+}
+      
+      body{
+        
+            font-family: Arial, sans-serif;
+            background-color: #f7f7f7;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            max-width: 600px;
+            width: 100%;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        form {
+            text-align: left;
+        }
+
+        label {
+            display: block;
+            margin-top: 10px;
+            color: #555;
+        }
+
+        textarea, input[type="number"] {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+        }
+
+        .checkbox-group label {
+            margin-top: 0;
+            margin-right: 10px;
+        }
+
+        button {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: background-color 0.2s;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        #resultado {
+            width: 100%;
+            height: 150px;
+            margin-top: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            padding: 10px;
+            font-family: Arial, sans-serif;
+            font-size: 16px; /* Tamaño de fuente predeterminado */
+            color: #333; /* Color de texto predeterminado */
+            background-color: #fff; /* Color de fondo predeterminado */
+        }
+
+        #copyButton {
+            background-color: #333;
+            color: #fff;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+            border-radius: 4px;
+            margin-left: 10px;
+            transition: background-color 0.2s;
+        }
+
+        #copyButton:hover {
+            background-color: #555;
+        }
+
+        #historial {
+            margin-top: 20px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            padding: 10px;
+            font-family: Arial, sans-serif;
+        }
+
+        p {
+            margin-top: 20px;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+      <div class="container">
+        <h1>Repetidor de Texto</h1>
+
+        <!-- Agregar un menú desplegable para seleccionar el idioma -->
+        <select id="languageSelector" onchange="cambiarIdioma()">
+            <option value="en">English</option>
+            <option value="es">Español</option>
+        </select>
+
+        <form>
+            <!-- Textos en inglés -->
+            <div class="form-group">
+                <label for="texto" class="lang" key="text">Text:</label>
+                <textarea id="texto" rows="4" required></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="repeticiones" class="lang" key="repetitions">Repetitions:</label>
+                <input type="number" id="repeticiones" min="1" value="1" required>
+            </div>
+
+            <div class="form-group checkbox-group">
+                <label for="espacios" class="lang" key="includeSpaces">Include Spaces:</label>
+                <input type="checkbox" id="espacios">
+            </div>
+
+            <button type="button" onclick="repetirTexto()" class="lang" key="repeat">Repeat</button>
+
+            <!-- Textos en inglés -->
+            <div class="form-group">
+                <label for="resultado" class="lang" key="result">Result:</label>
+                <textarea id="resultado" rows="4" readonly></textarea>
+            </div>
+
+            <button type="button" id="copyButton" onclick="copiarResultado()" class="lang" key="copy">Copy</button>
+        </form>
+
+        <div id="historial">
+            <!-- Textos en inglés -->
+            <h3 class="lang" key="history">History of Repeated Texts:</h3>
+            <p>El historial de los textos repetidos se mostrará aquí. Puedes ver y copiar textos anteriores.</p>
+        </div>
+      </div>
+  
+
+    <script>
+       const languages = {
+            en: {
+                text: "Text:",
+                repetitions: "Repetitions:",
+                includeSpaces: "Include Spaces:",
+                repeat: "Repeat",
+                result: "Result:",
+                copy: "Copy",
+                history: "History of Repeated Texts:"
+            },
+            es: {
+                text: "Texto:",
+                repetitions: "Repeticiones:",
+                includeSpaces: "Incluir Espacios:",
+                repeat: "Repetir",
+                result: "Resultado:",
+                copy: "Copiar",
+                history: "Historial de Textos Repetidos:"
+            }
+        };
+
+        // Función para cambiar el idioma
+        function cambiarIdioma() {
+            const selectedLanguage = document.getElementById("languageSelector").value;
+            const elements = document.querySelectorAll(".lang");
+
+            elements.forEach(element => {
+                const key = element.getAttribute("key");
+                if (languages[selectedLanguage] && languages[selectedLanguage][key]) {
+                    element.textContent = languages[selectedLanguage][key];
+                }
+            });
+        }
+
+      
+        // Función para repetir el texto y actualizar el historial
+        function repetirTexto() {
+            var texto = document.getElementById("texto").value;
+            var repeticiones = parseInt(document.getElementById("repeticiones").value);
+            var incluirEspacios = document.getElementById("espacios").checked;
+
+            var resultado = "";
+
+            if (!isNaN(repeticiones)) {
+                for (var i = 0; i < repeticiones; i++) {
+                    resultado += texto;
+                    if (incluirEspacios && i < repeticiones - 1) {
+                        resultado += " ";
+                    }
+                }
+            }
+
+            var resultadoTextArea = document.getElementById("resultado");
+            resultadoTextArea.value = resultado;
+            actualizarHistorial(resultado);
+
+            // Personalización de estilos
+            var tamanioFuente = document.getElementById("tamanioFuente").value;
+            var colorTexto = document.getElementById("colorTexto").value;
+            var colorFondo = document.getElementById("colorFondo").value;
+
+            resultadoTextArea.style.fontSize = tamanioFuente + "px";
+            resultadoTextArea.style.color = colorTexto;
+            resultadoTextArea.style.backgroundColor = colorFondo;
+        }
+
+        // Función para copiar el resultado al portapapeles
+        function copiarResultado() {
+            var resultado = document.getElementById("resultado");
+            resultado.select();
+            document.execCommand("copy");
+            alert("Texto copiado al portapapeles.");
+        }
+
+        // Función para actualizar el historial
+        function actualizarHistorial(nuevoTexto) {
+            var historial = document.getElementById("historial");
+
+            // Crear un nuevo elemento de párrafo
+            var nuevoElemento = document.createElement("p");
+            nuevoElemento.textContent = nuevoTexto;
+
+            // Agregar el nuevo elemento al historial
+            historial.appendChild(nuevoElemento);
+        }
+    </script>
+</body>
+</html>
